@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.3 SOC FEED FALLBACK</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.4 SOC COMMAND CENTER</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -2240,6 +2240,144 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
  }
  $('soc-refresh').addEventListener('click',refresh);
  refresh();
+})();
+</script>
+
+
+<!-- APEX CYBER MATRIX v10.4: SOC COMMAND CENTER -->
+<style>
+ #apex-soc-command .cmd-card{background:#071827;border:1px solid #14532d;border-radius:10px;padding:12px;min-width:0}
+ #apex-soc-command .cmd-label{display:block;color:#9ca3af;font-size:10px;letter-spacing:.12em;margin-bottom:5px}
+ #apex-soc-command input,#apex-soc-command select,#apex-soc-command textarea{width:100%;background:#020b12;color:#d1fae5;border:1px solid #17634b;border-radius:7px;padding:10px;font:inherit;font-size:12px}
+ #apex-soc-command button{border:1px solid #10b981;border-radius:7px;padding:10px 12px;color:#34d399;background:#052e24;font-size:11px;font-weight:700}
+ #apex-soc-command button:disabled{opacity:.5}
+ #apex-soc-command .cmd-small{font-size:11px;color:#9ca3af;line-height:1.5}
+ #apex-soc-command .cmd-row{border-bottom:1px solid #12352d;padding:9px 0;font-size:12px}
+ #apex-soc-command .cmd-row:last-child{border:0}
+</style>
+<section id="apex-soc-command" class="mt-4 space-y-3" aria-labelledby="apex-soc-command-title">
+ <div class="cmd-card space-y-3">
+  <div class="border-b border-cyber-border pb-3">
+   <h2 id="apex-soc-command-title" class="text-sm font-bold tracking-widest text-cyber-green">14 // SOC COMMAND CENTER</h2>
+   <p class="text-xs text-gray-400 mt-1">Penapisan rekod kerentanan dan daftar pemerhatian penganalisis.</p>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+   <div class="cmd-card"><span class="cmd-label">CISA KEV LOADED</span><strong id="cmd-kev-count" class="text-2xl text-emerald-300">—</strong></div>
+   <div class="cmd-card"><span class="cmd-label">LOCAL CASES</span><strong id="cmd-case-count" class="text-2xl text-emerald-300">0</strong></div>
+   <div class="cmd-card"><span class="cmd-label">HIGH / CRITICAL</span><strong id="cmd-high-count" class="text-2xl text-emerald-300">0</strong></div>
+   <div class="cmd-card"><span class="cmd-label">REGION</span><strong class="text-lg text-emerald-300">MY / ASIA</strong></div>
+  </div>
+  <div class="cmd-card space-y-2">
+   <strong class="text-xs text-cyber-green">CISA KEV · SEARCH & FILTER</strong>
+   <p class="cmd-small">Katalog kerentanan yang diketahui dieksploitasi. CISA KEV tidak menyediakan skor keterukan CVSS dalam setiap rekod; semak CVE pada NVD untuk skor dan severity.</p>
+   <label class="cmd-label" for="cmd-kev-search">SEARCH CVE / PRODUCT / VENDOR</label>
+   <input id="cmd-kev-search" type="search" placeholder="Contoh: CVE-2024 atau Microsoft">
+   <div class="flex flex-wrap gap-2">
+    <button type="button" id="cmd-kev-refresh">LOAD / REFRESH CISA KEV</button>
+    <a class="cmd-small underline text-emerald-300 self-center" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer">Official CISA Catalog ↗</a>
+   </div>
+   <div id="cmd-kev-status" class="cmd-small">Belum dimuatkan.</div>
+   <div id="cmd-kev-list" class="max-h-72 overflow-auto"></div>
+  </div>
+  <div class="cmd-card space-y-2">
+   <strong class="text-xs text-cyber-green">MALAYSIA & ASIA INTELLIGENCE</strong>
+   <p class="cmd-small">Pautan ini membuka sumber awam untuk semakan rantau. Ia bukan penapis negara masa nyata di dalam feed APEX.</p>
+   <div class="grid grid-cols-2 gap-2">
+    <a class="cmd-small underline text-emerald-300" href="https://threatmap.fortiguard.com/" target="_blank" rel="noopener noreferrer">FortiGuard Global Map ↗</a>
+    <a class="cmd-small underline text-emerald-300" href="https://recentbreaches.com/" target="_blank" rel="noopener noreferrer">RecentBreaches ↗</a>
+    <a class="cmd-small underline text-emerald-300" href="https://www.cybersecurity.my/" target="_blank" rel="noopener noreferrer">CyberSecurity Malaysia ↗</a>
+    <a class="cmd-small underline text-emerald-300" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer">CISA KEV ↗</a>
+   </div>
+  </div>
+  <div class="cmd-card space-y-3">
+   <div>
+    <strong class="text-xs text-cyber-green">ANALYST OBSERVATION REGISTER</strong>
+    <p class="cmd-small mt-1">Daftar manual untuk pemerhatian yang anda sahkan. Data disimpan pada Safari peranti ini sahaja. Jangan masukkan kata laluan atau maklumat sulit.</p>
+   </div>
+   <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+    <div><label class="cmd-label" for="cmd-case-title">OBSERVATION / THREAT</label><input id="cmd-case-title" placeholder="Nama pemerhatian / insiden"></div>
+    <div><label class="cmd-label" for="cmd-case-country">COUNTRY / REGION</label><input id="cmd-case-country" placeholder="Malaysia / Singapore / Asia"></div>
+    <div><label class="cmd-label" for="cmd-case-severity">SEVERITY</label><select id="cmd-case-severity"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
+    <div><label class="cmd-label" for="cmd-case-source">SOURCE / REFERENCE</label><input id="cmd-case-source" placeholder="URL atau sumber rujukan"></div>
+   </div>
+   <button type="button" id="cmd-case-add">ADD OBSERVATION</button>
+   <div class="grid grid-cols-2 gap-2">
+    <div><label class="cmd-label" for="cmd-filter-country">FILTER COUNTRY</label><input id="cmd-filter-country" placeholder="All countries"></div>
+    <div><label class="cmd-label" for="cmd-filter-severity">FILTER SEVERITY</label><select id="cmd-filter-severity"><option value="">All levels</option><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
+   </div>
+   <div id="cmd-case-list" class="cmd-small">Tiada pemerhatian direkodkan.</div>
+   <div class="flex flex-wrap gap-2">
+    <button type="button" id="cmd-export">EXPORT SOC REPORT CSV</button>
+    <button type="button" id="cmd-clear">CLEAR LOCAL REGISTER</button>
+   </div>
+   <p class="cmd-small">Nota: rekod manual ialah input penganalisis, bukan amaran automatik. Semak bukti dan sumber sebelum menetapkan severity.</p>
+  </div>
+ </div>
+</section>
+<script>
+(function(){
+ const root=document.getElementById('apex-soc-command');
+ if(!root||root.dataset.initialized==='1')return;
+ root.dataset.initialized='1';
+ const $=id=>root.querySelector('#'+id);
+ const key='apexCyberMatrixSOCObservations_v1';
+ let cases=[];
+ try{cases=JSON.parse(localStorage.getItem(key)||'[]');if(!Array.isArray(cases))cases=[];}catch(e){cases=[];}
+ let kevItems=[];
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const save=()=>{try{localStorage.setItem(key,JSON.stringify(cases));}catch(e){}};
+ function renderCases(){
+  const country=$('cmd-filter-country').value.trim().toLowerCase();
+  const severity=$('cmd-filter-severity').value;
+  const rows=cases.filter(x=>(!country||x.country.toLowerCase().includes(country))&&(!severity||x.severity===severity));
+  $('cmd-case-count').textContent=cases.length;
+  $('cmd-high-count').textContent=cases.filter(x=>['High','Critical'].includes(x.severity)).length;
+  $('cmd-case-list').innerHTML=rows.length?rows.map(x=>'<div class="cmd-row"><strong class="text-emerald-300">'+esc(x.title)+'</strong><div>'+esc(x.country)+' · '+esc(x.severity)+' · '+esc(x.date)+'</div>'+(x.source?'<a class="underline text-emerald-300" href="'+esc(x.source)+'" target="_blank" rel="noopener noreferrer">Open source ↗</a>':'')+' <button type="button" data-del="'+esc(x.id)+'" style="float:right;padding:4px 7px">DELETE</button></div>').join(''):'Tiada rekod sepadan.';
+ }
+ function renderKev(){
+  const q=$('cmd-kev-search').value.trim().toLowerCase();
+  const rows=kevItems.filter(x=>[x.cveID,x.vendorProject,x.product,x.vulnerabilityName].join(' ').toLowerCase().includes(q)).slice(0,40);
+  $('cmd-kev-list').innerHTML=rows.length?rows.map(x=>'<div class="cmd-row"><a class="underline text-emerald-300" href="https://nvd.nist.gov/vuln/detail/'+encodeURIComponent(x.cveID||'')+'" target="_blank" rel="noopener noreferrer">'+esc(x.cveID)+'</a><div>'+esc(x.vendorProject)+' · '+esc(x.product)+'</div><div class="cmd-small">'+esc(x.vulnerabilityName)+' · Added '+esc(x.dateAdded)+' · Severity: check NVD</div></div>').join(''):'Tiada rekod sepadan / feed belum dimuatkan.';
+ }
+ async function loadKev(){
+  $('cmd-kev-status').textContent='Menyambung ke CISA JSON…';
+  $('cmd-kev-refresh').disabled=true;
+  try{
+   const r=await fetch('https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json',{cache:'no-store'});
+   if(!r.ok)throw new Error('HTTP '+r.status);
+   const data=await r.json();
+   kevItems=Array.isArray(data.vulnerabilities)?data.vulnerabilities:[];
+   $('cmd-kev-count').textContent=kevItems.length.toLocaleString();
+   $('cmd-kev-status').textContent='CISA KEV berjaya dimuatkan · '+new Date().toLocaleString();
+   renderKev();
+  }catch(e){
+   $('cmd-kev-count').textContent='—';
+   $('cmd-kev-status').textContent='Tidak dapat memuatkan JSON dalam pelayar ini. Gunakan pautan katalog rasmi di atas. ('+e.message+')';
+   $('cmd-kev-list').textContent='Feed tidak tersedia dalam sesi ini.';
+  }finally{$('cmd-kev-refresh').disabled=false;}
+ }
+ $('cmd-case-add').addEventListener('click',()=>{
+  const title=$('cmd-case-title').value.trim(),country=$('cmd-case-country').value.trim(),source=$('cmd-case-source').value.trim();
+  if(!title||!country){alert('Isi Observation / Threat dan Country / Region dahulu.');return;}
+  if(source&&!/^https?:\/\//i.test(source)){alert('Source perlu bermula dengan https:// atau http://');return;}
+  cases.unshift({id:String(Date.now())+Math.random().toString(16).slice(2,6),title,country,severity:$('cmd-case-severity').value,source,date:new Date().toLocaleString()});
+  save();$('cmd-case-title').value='';$('cmd-case-country').value='';$('cmd-case-source').value='';renderCases();
+ });
+ $('cmd-case-list').addEventListener('click',e=>{
+  const b=e.target.closest('[data-del]');if(!b)return;
+  cases=cases.filter(x=>x.id!==b.dataset.del);save();renderCases();
+ });
+ ['cmd-filter-country','cmd-filter-severity'].forEach(id=>$(id).addEventListener('input',renderCases));
+ $('cmd-kev-search').addEventListener('input',renderKev);
+ $('cmd-kev-refresh').addEventListener('click',loadKev);
+ $('cmd-clear').addEventListener('click',()=>{if(confirm('Padam semua pemerhatian tempatan?')){cases=[];save();renderCases();}});
+ $('cmd-export').addEventListener('click',()=>{
+  const rows=[['Observation','Country/Region','Severity','Source','Date'],...cases.map(x=>[x.title,x.country,x.severity,x.source,x.date])];
+  const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='APEX_SOC_Observation_Register.csv';a.click();URL.revokeObjectURL(url);
+ });
+ renderCases();loadKev();
 })();
 </script>
 
