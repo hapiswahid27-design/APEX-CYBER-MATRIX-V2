@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.1 RESTORED GLOBAL & REGIONAL MAPS</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.2 SOC LIVE INTELLIGENCE</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -2106,6 +2106,134 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
   let tries=0;
   const timer=setInterval(()=>{tries++;if(typeof L!=='undefined'){clearInterval(timer);startMap();}else if(tries>30){clearInterval(timer);startMap();}},200);
  }
+})();
+</script>
+
+
+<!-- APEX CYBER MATRIX v10.2: SOC LIVE INTELLIGENCE DASHBOARD -->
+<style>
+ #apex-soc-live .soc-card{background:#071827;border:1px solid #14532d;border-radius:10px;padding:12px;min-width:0}
+ #apex-soc-live .soc-value{font-size:25px;font-weight:800;color:#34d399;letter-spacing:.03em}
+ #apex-soc-live .soc-label{font-size:10px;color:#9ca3af;letter-spacing:.12em}
+ #apex-soc-live .soc-btn{padding:10px 13px;border:1px solid #10b981;border-radius:7px;color:#34d399;background:#052e24;font-size:11px;font-weight:700}
+ #apex-soc-live .soc-note{font-size:11px;line-height:1.5;color:#9ca3af}
+ #apex-soc-live .soc-row{border-bottom:1px solid #12352d;padding:10px 2px;font-size:12px}
+ #apex-soc-live .soc-row:last-child{border-bottom:0}
+</style>
+<section id="apex-soc-live" class="mt-4 space-y-3" aria-labelledby="apex-soc-live-title">
+ <div class="soc-card space-y-3">
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-cyber-border pb-3">
+   <div>
+    <h2 id="apex-soc-live-title" class="text-sm font-bold tracking-widest text-cyber-green">13 // SOC LIVE INTELLIGENCE DASHBOARD</h2>
+    <p class="text-xs text-gray-400 mt-1">Ringkasan laporan kebocoran awam dan kerentanan yang diketahui.</p>
+   </div>
+   <span id="soc-feed-state" class="text-xs border border-cyber-green rounded-full px-2 py-1">CONNECTING</span>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+   <div class="soc-card"><div class="soc-label">BREACH INDEX TODAY</div><div id="soc-index" class="soc-value">—</div></div>
+   <div class="soc-card"><div class="soc-label">REPORTED · 24H</div><div id="soc-24h" class="soc-value">—</div></div>
+   <div class="soc-card"><div class="soc-label">REPORTED · 7D</div><div id="soc-7d" class="soc-value">—</div></div>
+   <div class="soc-card"><div class="soc-label">CRITICAL · 7D</div><div id="soc-critical" class="soc-value">—</div></div>
+  </div>
+  <div class="flex flex-wrap items-center justify-between gap-2">
+   <span id="soc-updated" class="soc-note">Menunggu data daripada penyedia…</span>
+   <button type="button" id="soc-refresh" class="soc-btn">REFRESH DATA</button>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+   <div class="soc-card">
+    <div class="flex items-center justify-between gap-2 mb-2">
+     <strong class="text-xs text-cyber-green">LATEST PUBLIC BREACH REPORTS</strong>
+     <span class="soc-label">FEED</span>
+    </div>
+    <div id="soc-breach-list" class="soc-note">Memuatkan laporan…</div>
+   </div>
+   <div class="soc-card">
+    <div class="flex items-center justify-between gap-2 mb-2">
+     <strong class="text-xs text-cyber-green">KNOWN EXPLOITED VULNERABILITIES</strong>
+     <span class="soc-label">CISA KEV FEED</span>
+    </div>
+    <div id="soc-kev-list" class="soc-note">Memuatkan kerentanan…</div>
+   </div>
+  </div>
+  <div class="soc-card">
+   <strong class="text-xs text-cyber-green">DATA SOURCES & COVERAGE</strong>
+   <p class="soc-note mt-2">Data dipaparkan daripada API awam RecentBreaches. Kemas kini sumber di-cache kira-kira 10 minit. Feed ini mengandungi laporan awam dan bukan pengesanan langsung pada rangkaian APEX, telefon atau organisasi anda.</p>
+   <p class="soc-note mt-2">Sebahagian rekod ialah dakwaan kebocoran yang dilaporkan pihak ketiga dan belum semestinya disahkan. Jangan anggap senarai KEV sebagai bukti sistem anda terdedah; semak produk dan versi secara berasingan.</p>
+   <p class="soc-note mt-2">Data/API: <a class="underline text-emerald-300" href="https://recentbreaches.com/embed" target="_blank" rel="noopener noreferrer">RecentBreaches</a> · Kerentanan: <a class="underline text-emerald-300" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer">CISA KEV Catalog</a>. Attribution dikekalkan.</p>
+  </div>
+ </div>
+</section>
+<script>
+(function(){
+ const root=document.getElementById('apex-soc-live');
+ if(!root || root.dataset.initialized==='1') return;
+ root.dataset.initialized='1';
+ const $=id=>root.querySelector('#'+id);
+ const fmt=v=>v===undefined||v===null?'—':Number(v).toLocaleString();
+ const set=(id,v)=>{const n=$(id);if(n)n.textContent=v;};
+ const safe=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ async function get(path){
+  const r=await fetch('https://recentbreaches.com/api/'+path,{headers:{'Accept':'application/json'},cache:'no-store'});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const j=await r.json();
+  if(j && j.error) throw new Error(j.error);
+  return j;
+ }
+ function listFrom(x){
+  if(Array.isArray(x)) return x;
+  if(x && Array.isArray(x.breaches)) return x.breaches;
+  if(x && Array.isArray(x.items)) return x.items;
+  if(x && Array.isArray(x.results)) return x.results;
+  return [];
+ }
+ async function refresh(){
+  set('soc-feed-state','UPDATING');
+  set('soc-updated','Mengambil data awam…');
+  $('soc-refresh').disabled=true;
+  const results=await Promise.allSettled([get('index'),get('breachesLatest?limit=6'),get('kevLatest?limit=5')]);
+  let ok=0;
+  const idx=results[0];
+  if(idx.status==='fulfilled'){
+   ok++;
+   const d=idx.value||{};
+   set('soc-index',fmt(d.index_today));
+   set('soc-24h',fmt(d.count_24h));
+   set('soc-7d',fmt(d.count_7d));
+   set('soc-critical',fmt(d.critical_7d));
+   set('soc-updated',d.updated?'Provider updated: '+new Date(d.updated).toLocaleString():'Index feed received');
+  }else{
+   ['soc-index','soc-24h','soc-7d','soc-critical'].forEach(id=>set(id,'—'));
+   set('soc-updated','Index feed unavailable: '+idx.reason.message);
+  }
+  const breach=results[1];
+  if(breach.status==='fulfilled'){
+   ok++;
+   const items=listFrom(breach.value);
+   $('soc-breach-list').innerHTML=items.length?items.slice(0,6).map(x=>{
+    const title=x.title||x.organization||x.company||'Untitled report';
+    const url=x.url||x.permalink||'https://recentbreaches.com/';
+    const date=x.date||x.date_discovered||'Date not supplied';
+    const sev=x.severity||x.risk_level||'Unrated';
+    return '<div class="soc-row"><a class="text-emerald-300 underline" href="'+safe(url)+'" target="_blank" rel="noopener noreferrer">'+safe(title)+'</a><div class="text-gray-400 mt-1">'+safe(date)+' · '+safe(sev)+'</div></div>';
+   }).join(''):'No breach records returned by feed.';
+  }else $('soc-breach-list').textContent='Feed unavailable: '+breach.reason.message;
+  const kev=results[2];
+  if(kev.status==='fulfilled'){
+   ok++;
+   const items=listFrom(kev.value);
+   $('soc-kev-list').innerHTML=items.length?items.slice(0,5).map(x=>{
+    const title=x.name||x.cve||'Vulnerability record';
+    const cve=x.cve||'CVE not supplied';
+    const due=x.dueDate||'Due date not supplied';
+    const url=x.nvd_url||'https://www.cisa.gov/known-exploited-vulnerabilities-catalog';
+    return '<div class="soc-row"><a class="text-emerald-300 underline" href="'+safe(url)+'" target="_blank" rel="noopener noreferrer">'+safe(cve)+'</a><div class="mt-1">'+safe(title)+'</div><div class="text-gray-400 mt-1">Due: '+safe(due)+'</div></div>';
+   }).join(''):'No KEV records returned by feed.';
+  }else $('soc-kev-list').textContent='KEV feed unavailable: '+kev.reason.message;
+  set('soc-feed-state',ok===3?'FEEDS ONLINE':ok+' / 3 FEEDS');
+  $('soc-refresh').disabled=false;
+ }
+ $('soc-refresh').addEventListener('click',refresh);
+ refresh();
 })();
 </script>
 
