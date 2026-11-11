@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.0 REAL-TIME GLOBAL ATTACK MAP</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.1 RESTORED GLOBAL & REGIONAL MAPS</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -1948,7 +1948,7 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
  <div class="fg-card space-y-3">
   <div class="flex flex-wrap items-center justify-between gap-2 border-b border-cyber-border pb-3">
    <div>
-    <h2 id="fg-map-title" class="text-sm font-bold tracking-widest text-cyber-green">11 // FORTIGUARD REAL-TIME GLOBAL ATTACK MAP</h2>
+    <h2 id="fg-map-title" class="text-sm font-bold tracking-widest text-cyber-green">11 // FORTIGUARD GLOBAL THREAT INTELLIGENCE</h2>
     <p class="text-xs text-gray-400 mt-1">Paparan aktiviti ancaman global daripada FortiGuard Labs.</p>
    </div>
    <span class="text-xs border border-cyber-green rounded-full px-2 py-1">EXTERNAL THREAT INTELLIGENCE</span>
@@ -1962,7 +1962,11 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
     <strong class="text-xs text-cyber-green">GLOBAL ATTACK ACTIVITY</strong>
     <span class="text-[10px] text-gray-400">FORTIGUARD LABS</span>
    </div>
-   <iframe class="fg-frame" src="https://threatmap.fortiguard.com/" title="FortiGuard Labs global threat map" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+   <div class="fg-frame" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;text-align:center;color:#9ca3af">
+    <strong style="color:#34d399;font-size:14px">FORTIGUARD MAP OPENS ON OFFICIAL SITE</strong>
+    <span style="font-size:12px;line-height:1.5">Paparan terbenam tidak dibenarkan oleh laman FortiGuard dalam sesetengah pelayar. Gunakan butang di atas untuk melihat peta rasmi.</span>
+    <a class="fg-btn" href="https://threatmap.fortiguard.com/" target="_blank" rel="noopener noreferrer">OPEN FORTIGUARD LIVE MAP ↗</a>
+   </div>
    <p class="fg-note mt-2">Jika peta tidak dipaparkan di dalam bingkai, tekan OPEN FORTIGUARD FULL MAP untuk melihat peta pada laman rasmi FortiGuard.</p>
   </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1981,6 +1985,28 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
  </div>
 </section>
 
+
+
+<!-- APEX CYBER MATRIX v10.1: RESTORED GLOBAL BREACH GLOBE -->
+<style>
+ #apex-global-globe .globe-card{background:#071827;border:1px solid #14532d;border-radius:10px;padding:12px}
+ #apex-global-globe .globe-frame{display:block;width:100%;height:500px;border:1px solid #0f766e;border-radius:8px;background:#06101b}
+ #apex-global-globe .globe-note{font-size:11px;line-height:1.5;color:#9ca3af}
+ @media(max-width:600px){#apex-global-globe .globe-frame{height:440px}}
+</style>
+<section id="apex-global-globe" class="mt-4 space-y-3" aria-labelledby="apex-global-globe-title">
+ <div class="globe-card space-y-3">
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-cyber-border pb-3">
+   <div>
+    <h2 id="apex-global-globe-title" class="text-sm font-bold tracking-widest text-cyber-green">10 // GLOBAL BREACH GEOGRAPHY</h2>
+    <p class="text-xs text-gray-400 mt-1">Globe laporan kebocoran global untuk melengkapkan peta rujukan Malaysia & Asia.</p>
+   </div>
+   <span class="text-xs border border-cyber-green rounded-full px-2 py-1">GLOBAL VIEW</span>
+  </div>
+  <iframe class="globe-frame" src="https://recentbreaches.com/embed/breach-globe?theme=cyber&window=28d" title="RecentBreaches global breach geography globe" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <p class="globe-note">Powered by <a class="underline text-emerald-300" href="https://recentbreaches.com/" target="_blank" rel="noopener noreferrer">RecentBreaches</a>. Globe ini menunjukkan geografi laporan kebocoran/insiden, bukan aliran serangan rangkaian masa nyata.</p>
+ </div>
+</section>
 
 <!-- APEX CYBER MATRIX v9.9: MALAYSIA & ASIA REGIONAL INTELLIGENCE -->
 <style>
