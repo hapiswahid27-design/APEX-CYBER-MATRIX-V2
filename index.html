@@ -84,7 +84,38 @@
         .leaflet-control-attribution { font-size:9px !important; }
         .leaflet-popup-content-wrapper,.leaflet-popup-tip { background:#071827; color:#00ff66; border:1px solid #00f0ff; }
         .leaflet-control-zoom a { background:#071827 !important; color:#00ff66 !important; border-color:#17405a !important; }
-    </style></head>
+    </style>
+<style id="apex-pc-desktop-layout">
+/* APEX CYBER MATRIX — desktop workstation layout; mobile layout remains responsive */
+html, body { min-height:100%; background:#030b12 !important; }
+body { color:#65e6a8; }
+@media (min-width: 1024px) {
+  header > div { max-width: 1760px !important; padding-left:28px; padding-right:28px; }
+  header { padding-top:18px !important; padding-bottom:18px !important; }
+  header h1 { font-size:27px !important; letter-spacing:.12em; }
+  main { max-width:1760px !important; padding:28px 32px !important; gap:24px !important; }
+  main > div { min-width:0; }
+  main .rounded-xl { border-radius:14px; }
+  main .p-5, main .p-6 { padding:22px !important; }
+  #world-map { height:460px !important; }
+  #apex-global-globe .globe-frame { height:560px !important; }
+  #apex-fortiguard-map .fg-frame { height:560px !important; }
+  #apex-live-terminals .term-screen { min-height:230px; font-size:12px; }
+  #apex-live-soc { max-width:none; }
+  input, select, textarea, button { font-size:14px; }
+  section, article { scroll-margin-top:100px; }
+}
+@media (min-width: 1440px) {
+  main { max-width:1900px !important; grid-template-columns: minmax(300px, .9fr) minmax(420px, 1.25fr) minmax(320px, .95fr) !important; gap:28px !important; }
+  #world-map { height:520px !important; }
+  #apex-global-globe .globe-frame, #apex-fortiguard-map .fg-frame { height:620px !important; }
+}
+@media (min-width: 1024px) and (max-width: 1200px) {
+  main { padding-left:20px !important; padding-right:20px !important; gap:16px !important; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; } }
+</style>
+</head>
 <body class="min-h-screen bg-cyber-dark text-emerald-400 relative overflow-x-hidden scanlines">
 
     <!-- Top Navigation Bar -->
