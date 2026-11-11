@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.6 LIVE SOC DASHBOARD</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.7 LIVE THREAT INTELLIGENCE</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -2339,23 +2339,52 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
   const rows=kevItems.filter(x=>[x.cveID,x.vendorProject,x.product,x.vulnerabilityName].join(' ').toLowerCase().includes(q)).slice(0,40);
   $('cmd-kev-list').innerHTML=rows.length?rows.map(x=>'<div class="cmd-row"><a class="underline text-emerald-300" href="https://nvd.nist.gov/vuln/detail/'+encodeURIComponent(x.cveID||'')+'" target="_blank" rel="noopener noreferrer">'+esc(x.cveID)+'</a><div>'+esc(x.vendorProject)+' · '+esc(x.product)+'</div><div class="cmd-small">'+esc(x.vulnerabilityName)+' · Added '+esc(x.dateAdded)+' · Severity: check NVD</div></div>').join(''):'Tiada rekod sepadan / feed belum dimuatkan.';
  }
- async function loadKev(){
-  $('cmd-kev-status').textContent='Menyambung ke CISA JSON…';
-  $('cmd-kev-refresh').disabled=true;
+async function loadKev(){
+  const status=$('cmd-kev-status'),button=$('cmd-kev-refresh');
+  status.textContent='Menyambung ke sumber katalog CISA…';
+  button.disabled=true;
+  const sources=[
+   {name:'CISA OFFICIAL',url:'https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json'},
+   {name:'CISA GITHUB MIRROR',url:'https://raw.githubusercontent.com/cisagov/kev-data/develop/known_exploited_vulnerabilities.json'},
+   {name:'CISA GITHUB MIRROR (MAIN)',url:'https://raw.githubusercontent.com/cisagov/kev-data/main/known_exploited_vulnerabilities.json'}
+  ];
+  let lastError='Unknown error',loaded=false;
   try{
-   const r=await fetch('https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json',{cache:'no-store'});
-   if(!r.ok)throw new Error('HTTP '+r.status);
-   const data=await r.json();
-   kevItems=Array.isArray(data.vulnerabilities)?data.vulnerabilities:[];
-   $('cmd-kev-count').textContent=kevItems.length.toLocaleString();
-   $('cmd-kev-status').textContent='CISA KEV berjaya dimuatkan · '+new Date().toLocaleString();
-   renderKev();
-  }catch(e){
-   $('cmd-kev-count').textContent='—';
-   $('cmd-kev-status').textContent='Tidak dapat memuatkan JSON dalam pelayar ini. Gunakan pautan katalog rasmi di atas. ('+e.message+')';
-   $('cmd-kev-list').textContent='Feed tidak tersedia dalam sesi ini.';
-  }finally{$('cmd-kev-refresh').disabled=false;}
- }
+   for(const source of sources){
+    try{
+     const controller=new AbortController();
+     const timer=setTimeout(()=>controller.abort(),18000);
+     let response;
+     try{response=await fetch(source.url,{cache:'no-store',signal:controller.signal,headers:{'Accept':'application/json'}});}
+     finally{clearTimeout(timer);}
+     if(!response.ok)throw new Error('HTTP '+response.status);
+     const data=await response.json();
+     if(!data||!Array.isArray(data.vulnerabilities)||!data.vulnerabilities.length)throw new Error('Format katalog tidak sah / kosong');
+     kevItems=data.vulnerabilities;
+     $('cmd-kev-count').textContent=(data.count||kevItems.length).toLocaleString();
+     const version=data.catalogVersion||'version tidak dibekalkan';
+     const released=data.dateReleased?new Date(data.dateReleased).toLocaleString():'tarikh tidak dibekalkan';
+     status.textContent='ONLINE · '+source.name+' · Catalog '+version+' · Released '+released+' · Retrieved '+new Date().toLocaleString();
+     try{localStorage.setItem('apexKevCacheV107',JSON.stringify({savedAt:Date.now(),source:source.name,data}));}catch(e){}
+     renderKev();loaded=true;break;
+    }catch(e){lastError=source.name+': '+(e.name==='AbortError'?'timeout':e.message);}
+   }
+   if(!loaded){
+    let cached=null;
+    try{cached=JSON.parse(localStorage.getItem('apexKevCacheV107')||'null');}catch(e){}
+    if(cached&&cached.data&&Array.isArray(cached.data.vulnerabilities)){
+     kevItems=cached.data.vulnerabilities;
+     $('cmd-kev-count').textContent=kevItems.length.toLocaleString();
+     status.textContent='CACHE MODE · '+(cached.source||'CISA source')+' · Saved '+new Date(cached.savedAt).toLocaleString()+' · Live refresh failed: '+lastError;
+     renderKev();
+    }else{
+     $('cmd-kev-count').textContent='—';
+     status.textContent='OFFLINE · Semua sumber gagal. '+lastError+' · Buka katalog rasmi CISA untuk semakan manual.';
+     $('cmd-kev-list').textContent='Tiada data langsung atau cache tersedia. Tiada rekod direka.';
+    }
+   }
+  }finally{button.disabled=false;}
+}
  $('cmd-case-add').addEventListener('click',()=>{
   const title=$('cmd-case-title').value.trim(),country=$('cmd-case-country').value.trim(),source=$('cmd-case-source').value.trim();
   if(!title||!country){alert('Isi Observation / Threat dan Country / Region dahulu.');return;}
