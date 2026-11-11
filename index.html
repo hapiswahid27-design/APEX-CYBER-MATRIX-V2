@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v9.5 SSL + WEB SECURITY</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v9.6 ASSET & RISK REGISTER</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -1823,6 +1823,115 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
   a.href=u;a.download='apex-v9.5-ssl-web-security-report.txt';a.click();
   setTimeout(()=>URL.revokeObjectURL(u),1000);
  });
+})();
+</script>
+
+
+<style>
+#apex-assets .asset-card{background:#020b09;border:1px solid #17634b;border-radius:10px;padding:13px}
+#apex-assets .asset-input{width:100%;background:#020b09;border:1px solid #17634b;border-radius:7px;padding:10px;color:#d1fae5;font-size:12px}
+#apex-assets .asset-btn{background:#064e3b;border:1px solid #10b981;color:#d1fae5;border-radius:7px;padding:10px;font-size:11px;font-weight:700}
+#apex-assets .asset-table{width:100%;border-collapse:collapse;font-size:11px}
+#apex-assets .asset-table th,#apex-assets .asset-table td{border-bottom:1px solid #174b3b;padding:8px;text-align:left;vertical-align:top}
+#apex-assets .asset-table th{color:#34d399}
+</style>
+<section id="apex-assets" class="mt-4 space-y-3" aria-labelledby="asset-title">
+ <div class="asset-card space-y-3">
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-cyber-border pb-3">
+   <div>
+    <h2 id="asset-title" class="text-sm font-bold tracking-widest text-cyber-green">10 // SECURITY ASSET & RISK REGISTER</h2>
+    <p class="text-xs text-gray-400 mt-1">Daftar aset digital dan semakan risiko asas untuk peranti, akaun, laman web atau rangkaian milik anda.</p>
+   </div>
+   <span class="text-xs border border-cyber-green rounded-full px-2 py-1">LOCAL REGISTER</span>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+   <input id="asset-name" class="asset-input" maxlength="100" placeholder="Nama aset / peranti">
+   <select id="asset-type" class="asset-input"><option>Computer / Laptop</option><option>Mobile Phone</option><option>Router / Firewall</option><option>Website / Domain</option><option>Cloud Account</option><option>Email Account</option><option>Other</option></select>
+   <input id="asset-owner" class="asset-input" maxlength="80" placeholder="Pemilik / PIC">
+   <select id="asset-criticality" class="asset-input"><option value="1">Criticality: Low</option><option value="2" selected>Criticality: Medium</option><option value="3">Criticality: High</option></select>
+   <select id="asset-mfa" class="asset-input"><option value="yes">MFA: Enabled</option><option value="no">MFA: Not enabled</option><option value="na">MFA: Not applicable / unknown</option></select>
+   <select id="asset-patch" class="asset-input"><option value="yes">Updates: Current</option><option value="no">Updates: Overdue / unknown</option><option value="na">Updates: Not applicable</option></select>
+   <select id="asset-exposure" class="asset-input"><option value="internal">Network exposure: Internal / private</option><option value="public">Network exposure: Public internet</option><option value="unknown">Network exposure: Unknown</option></select>
+   <input id="asset-review" class="asset-input" type="date" aria-label="Review date">
+  </div>
+  <button id="asset-add" type="button" class="asset-btn w-full">ADD ASSET TO REGISTER</button>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+   <div class="asset-card"><div class="text-[10px] text-gray-400">TOTAL ASSETS</div><strong id="asset-total">0</strong></div>
+   <div class="asset-card"><div class="text-[10px] text-gray-400">HIGH RISK</div><strong id="asset-high">0</strong></div>
+   <div class="asset-card"><div class="text-[10px] text-gray-400">MFA GAPS</div><strong id="asset-mfa-gaps">0</strong></div>
+   <div class="asset-card"><div class="text-[10px] text-gray-400">UPDATE GAPS</div><strong id="asset-update-gaps">0</strong></div>
+  </div>
+  <div class="overflow-x-auto asset-card">
+   <table class="asset-table">
+    <thead><tr><th>Asset</th><th>Risk</th><th>Security gaps</th><th>Action</th></tr></thead>
+    <tbody id="asset-rows"><tr><td colspan="4" class="text-gray-400">Belum ada aset. Tambah aset pertama di atas.</td></tr></tbody>
+   </table>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+   <button id="asset-export" type="button" class="asset-btn">EXPORT ASSET REGISTER (CSV)</button>
+   <button id="asset-clear" type="button" class="asset-btn">CLEAR ALL REGISTER DATA</button>
+  </div>
+  <p class="text-xs text-gray-400">Data disimpan secara lokal dalam Safari pada peranti ini. Skor risiko ialah penilaian asas berdasarkan input anda, bukan hasil imbasan automatik atau pengesahan keselamatan teknikal. Jangan masukkan kata laluan, nombor kad atau maklumat sulit.</p>
+ </div>
+</section>
+<script>
+(function(){
+ const $=id=>document.getElementById(id), root=$('apex-assets');
+ if(!root||root.dataset.ready)return;root.dataset.ready='1';
+ const KEY='apexCyberMatrixAssetRegister_v1';
+ let records=[];
+ try{records=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(records))records=[];}catch(e){records=[];}
+ function risk(r){
+  let score=(r.criticality==='3'?2:r.criticality==='2'?1:0);
+  if(r.mfa==='no')score+=2;
+  if(r.patch==='no')score+=2;
+  if(r.exposure==='public')score+=2;
+  if(r.exposure==='unknown')score+=1;
+  return score>=5?'HIGH':score>=3?'MEDIUM':'LOW';
+ }
+ function gaps(r){
+  const a=[];
+  if(r.mfa==='no')a.push('MFA not enabled');
+  if(r.patch==='no')a.push('Updates overdue / unknown');
+  if(r.exposure==='unknown')a.push('Exposure unknown');
+  if(r.exposure==='public')a.push('Publicly exposed');
+  if(!a.length)a.push('No gaps recorded');
+  return a.join('; ');
+ }
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(records));}catch(e){$('asset-rows').textContent='Unable to save locally. Browser storage may be full or disabled.';}}
+ function render(){
+  $('asset-total').textContent=records.length;
+  $('asset-high').textContent=records.filter(r=>risk(r)==='HIGH').length;
+  $('asset-mfa-gaps').textContent=records.filter(r=>r.mfa==='no').length;
+  $('asset-update-gaps').textContent=records.filter(r=>r.patch==='no').length;
+  const body=$('asset-rows');body.replaceChildren();
+  if(!records.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=4;td.textContent='Belum ada aset. Tambah aset pertama di atas.';td.className='text-gray-400';tr.append(td);body.append(tr);return;}
+  records.forEach(r=>{
+   const tr=document.createElement('tr');
+   const a=document.createElement('td');a.textContent=r.name+' · '+r.type+'\nPIC: '+(r.owner||'Not assigned')+'\nReview: '+(r.review||'Not set');
+   const b=document.createElement('td');b.textContent=risk(r);b.className=risk(r)==='HIGH'?'text-red-400 font-bold':risk(r)==='MEDIUM'?'text-amber-300':'text-emerald-400';
+   const c=document.createElement('td');c.textContent=gaps(r);
+   const d=document.createElement('td');const del=document.createElement('button');del.type='button';del.textContent='DELETE';del.className='asset-btn';del.addEventListener('click',()=>{records=records.filter(x=>x.id!==r.id);save();render();});d.append(del);
+   tr.append(a,b,c,d);body.append(tr);
+  });
+ }
+ $('asset-add').addEventListener('click',()=>{
+  const name=$('asset-name').value.trim();
+  if(!name){$('asset-name').focus();return;}
+  records.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),name,type:$('asset-type').value,owner:$('asset-owner').value.trim(),criticality:$('asset-criticality').value,mfa:$('asset-mfa').value,patch:$('asset-patch').value,exposure:$('asset-exposure').value,review:$('asset-review').value,created:new Date().toISOString()});
+  save();render();$('asset-name').value='';$('asset-owner').value='';
+ });
+ $('asset-export').addEventListener('click',()=>{
+  const esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const rows=[['Asset','Type','Owner/PIC','Criticality','MFA','Updates','Exposure','Risk','Security gaps','Review date'],...records.map(r=>[r.name,r.type,r.owner,r.criticality,r.mfa,r.patch,r.exposure,risk(r),gaps(r),r.review])];
+  const csv='\uFEFF'+rows.map(row=>row.map(esc).join(',')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='apex-security-asset-register.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ });
+ $('asset-clear').addEventListener('click',()=>{
+  if(!confirm('Padam semua rekod aset yang disimpan dalam Safari pada peranti ini?'))return;
+  records=[];save();render();
+ });
+ render();
 })();
 </script>
 
