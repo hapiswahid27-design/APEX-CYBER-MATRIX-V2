@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v9.8 ADVANCED LIVE MAP</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.0 REAL-TIME GLOBAL ATTACK MAP</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -1936,46 +1936,151 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
 </script>
 
 
-<!-- APEX CYBER MATRIX v9.8: LIVE THREAT & BREACH MAP -->
+<!-- APEX CYBER MATRIX v10.0: FORTIGUARD GLOBAL ATTACK MAP -->
 <style>
- #apex-live-map .map-card{background:#071827;border:1px solid #14532d;border-radius:10px;padding:12px}
- #apex-live-map .map-frame{display:block;width:100%;height:520px;border:1px solid #0f766e;border-radius:8px;background:#06101b}
- #apex-live-map .map-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border:1px solid #10b981;border-radius:7px;color:#34d399;background:#052e24;font-size:12px;font-weight:700}
- #apex-live-map .map-note{font-size:11px;line-height:1.5;color:#9ca3af}
- @media(max-width:600px){#apex-live-map .map-frame{height:440px}}
+ #apex-fortiguard-map .fg-card{background:#071827;border:1px solid #14532d;border-radius:10px;padding:12px}
+ #apex-fortiguard-map .fg-frame{display:block;width:100%;height:650px;border:1px solid #0f766e;border-radius:8px;background:#06110d}
+ #apex-fortiguard-map .fg-btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 14px;border:1px solid #10b981;border-radius:7px;color:#34d399;background:#052e24;font-size:12px;font-weight:700}
+ #apex-fortiguard-map .fg-note{font-size:11px;line-height:1.5;color:#9ca3af}
+ @media(max-width:600px){#apex-fortiguard-map .fg-frame{height:620px}}
 </style>
-<section id="apex-live-map" class="mt-4 space-y-3" aria-labelledby="apex-live-map-title">
- <div class="map-card space-y-3">
+<section id="apex-fortiguard-map" class="mt-4 space-y-3" aria-labelledby="fg-map-title">
+ <div class="fg-card space-y-3">
   <div class="flex flex-wrap items-center justify-between gap-2 border-b border-cyber-border pb-3">
    <div>
-    <h2 id="apex-live-map-title" class="text-sm font-bold tracking-widest text-cyber-green">11 // GLOBAL CYBER THREAT & BREACH MAP</h2>
-    <p class="text-xs text-gray-400 mt-1">Peta geografi insiden kebocoran yang dilaporkan, bersama pautan ke peta telemetri ancaman langsung.</p>
+    <h2 id="fg-map-title" class="text-sm font-bold tracking-widest text-cyber-green">11 // FORTIGUARD REAL-TIME GLOBAL ATTACK MAP</h2>
+    <p class="text-xs text-gray-400 mt-1">Paparan aktiviti ancaman global daripada FortiGuard Labs.</p>
    </div>
-   <span class="text-xs border border-cyber-green rounded-full px-2 py-1">PUBLIC INTELLIGENCE</span>
+   <span class="text-xs border border-cyber-green rounded-full px-2 py-1">EXTERNAL THREAT INTELLIGENCE</span>
   </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-   <a class="map-btn" href="https://threatmap.brandefense.io/" target="_blank" rel="noopener noreferrer">OPEN LIVE THREAT MAP ↗</a>
-   <a class="map-btn" href="https://threatmap.brandefense.io/about" target="_blank" rel="noopener noreferrer">THREAT MAP METHODOLOGY ↗</a>
+   <a class="fg-btn" href="https://threatmap.fortiguard.com/" target="_blank" rel="noopener noreferrer">OPEN FORTIGUARD FULL MAP ↗</a>
+   <a class="fg-btn" href="https://www.fortiguard.com/faq" target="_blank" rel="noopener noreferrer">FORTIGUARD THREAT FAQ ↗</a>
   </div>
-  <div class="map-card">
-   <div class="text-[10px] text-gray-400 mb-2">GLOBAL BREACH GEOGRAPHY · LAST 28 DAYS</div>
-   <iframe class="map-frame" src="https://recentbreaches.com/embed/breach-globe?theme=cyber&window=28d" title="Recent Breaches global breach geography globe" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-   <p class="map-note mt-2">Powered by <a class="underline text-emerald-300" href="https://recentbreaches.com/" target="_blank" rel="noopener noreferrer">RecentBreaches</a>. Paparan ini menunjukkan geografi laporan kebocoran/insiden, bukan aliran serangan rangkaian masa nyata. Data mungkin dikemas kini secara berkala, bukan setiap saat.</p>
+  <div class="fg-card">
+   <div class="flex items-center justify-between gap-2 mb-2">
+    <strong class="text-xs text-cyber-green">GLOBAL ATTACK ACTIVITY</strong>
+    <span class="text-[10px] text-gray-400">FORTIGUARD LABS</span>
+   </div>
+   <iframe class="fg-frame" src="https://threatmap.fortiguard.com/" title="FortiGuard Labs global threat map" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+   <p class="fg-note mt-2">Jika peta tidak dipaparkan di dalam bingkai, tekan OPEN FORTIGUARD FULL MAP untuk melihat peta pada laman rasmi FortiGuard.</p>
   </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-   <div class="map-card">
-    <div class="text-[10px] text-gray-400">LIVE THREAT TELEMETRY</div>
-    <strong class="text-sm text-cyber-green">Brandefense Threat Map</strong>
-    <p class="map-note mt-1">Peta luaran menggunakan sensor dan honeypot mereka untuk memaparkan aktiviti ancaman. Buka melalui butang di atas.</p>
+   <div class="fg-card">
+    <div class="text-[10px] text-gray-400">DATA SOURCE</div>
+    <strong class="text-sm text-cyber-green">FortiGuard Labs</strong>
+    <p class="fg-note mt-1">Paparan global berdasarkan aktiviti ancaman yang dikesan oleh sensor/telemetri FortiGuard.</p>
    </div>
-   <div class="map-card">
-    <div class="text-[10px] text-gray-400">EMBEDDED MAP</div>
-    <strong class="text-sm text-cyber-green">Global Breach Geography</strong>
-    <p class="map-note mt-1">Globe terbenam menunjukkan laporan kebocoran mengikut negara. Ia bukan bukti serangan terhadap peranti atau rangkaian APEX.</p>
+   <div class="fg-card">
+    <div class="text-[10px] text-gray-400">APEX CONNECTION STATUS</div>
+    <strong class="text-sm text-cyber-green">External public map</strong>
+    <p class="fg-note mt-1">Peta ini tidak disambungkan kepada log, firewall atau rangkaian peranti APEX anda.</p>
    </div>
   </div>
-  <p class="map-note">Nota keselamatan: lokasi geografi berasaskan data awam dan anggaran sumber. Ia tidak mengenal pasti lokasi fizikal penyerang dengan tepat dan tidak memantau rangkaian anda. Data widget pihak ketiga mungkin tertakluk kepada had, kelewatan, ketersediaan dan syarat penggunaan penyedia. Kekalkan kredit “Powered by RecentBreaches”.</p>
+  <p class="fg-note">Nota: Peta memaparkan aktiviti ancaman global yang dilihat oleh ekosistem FortiGuard, bukan serangan yang disahkan terhadap telefon atau laman APEX anda. Lokasi berdasarkan maklumat rangkaian/telemetri dan tidak semestinya lokasi fizikal penyerang. Ketersediaan paparan terbenam bergantung pada dasar keselamatan laman FortiGuard dan pelayar.</p>
  </div>
 </section>
+
+
+<!-- APEX CYBER MATRIX v9.9: MALAYSIA & ASIA REGIONAL INTELLIGENCE -->
+<style>
+ #apex-sea-intel .sea-card{background:#071827;border:1px solid #14532d;border-radius:10px;padding:12px}
+ #apex-sea-intel #sea-reference-map{height:390px;width:100%;border:1px solid #0f766e;border-radius:8px;background:#06101b;z-index:1}
+ #apex-sea-intel .sea-btn{padding:9px 12px;border:1px solid #10b981;border-radius:7px;color:#34d399;background:#052e24;font-size:11px;font-weight:700}
+ #apex-sea-intel .sea-select{width:100%;padding:12px;background:#06101b;color:#a7f3d0;border:1px solid #166534;border-radius:8px}
+ #apex-sea-intel .sea-note{font-size:11px;line-height:1.5;color:#9ca3af}
+ #apex-sea-intel .leaflet-container{background:#06101b;font-family:'Courier New',monospace}
+ #apex-sea-intel .leaflet-popup-content-wrapper,#apex-sea-intel .leaflet-popup-tip{background:#071827;color:#00ff99;border:1px solid #0f766e}
+</style>
+<section id="apex-sea-intel" class="mt-4 space-y-3" aria-labelledby="sea-intel-title">
+ <div class="sea-card space-y-3">
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-cyber-border pb-3">
+   <div>
+    <h2 id="sea-intel-title" class="text-sm font-bold tracking-widest text-cyber-green">12 // MALAYSIA & ASIA THREAT INTELLIGENCE</h2>
+    <p class="text-xs text-gray-400 mt-1">Peta rujukan serantau dan senarai negara fokus untuk semakan sumber ancaman awam.</p>
+   </div>
+   <span class="text-xs border border-cyber-green rounded-full px-2 py-1">REGIONAL VIEW</span>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+   <div>
+    <label for="sea-country" class="block text-xs text-gray-400 mb-1">PILIH NEGARA FOKUS</label>
+    <select id="sea-country" class="sea-select">
+     <option value="3.139,101.686,6">Malaysia · Kuala Lumpur</option>
+     <option value="1.352,103.820,7">Singapore</option>
+     <option value="-6.208,106.845,5">Indonesia · Jakarta</option>
+     <option value="13.756,100.502,5">Thailand · Bangkok</option>
+     <option value="14.600,120.984,5">Philippines · Manila</option>
+     <option value="21.028,105.834,5">Vietnam · Hanoi</option>
+     <option value="4.904,114.939,7">Brunei · Bandar Seri Begawan</option>
+     <option value="11.557,104.928,6">Cambodia · Phnom Penh</option>
+     <option value="17.975,102.633,6">Laos · Vientiane</option>
+     <option value="19.763,96.079,5">Myanmar · Naypyidaw</option>
+     <option value="35.676,139.650,4">Japan · Tokyo</option>
+     <option value="37.566,126.978,5">South Korea · Seoul</option>
+     <option value="39.904,116.407,4">China · Beijing</option>
+     <option value="28.614,77.209,4">India · New Delhi</option>
+    </select>
+   </div>
+   <div class="sea-card">
+    <div class="text-[10px] text-gray-400">SELECTED GEOGRAPHIC FOCUS</div>
+    <strong id="sea-focus-label" class="text-sm text-cyber-green">Malaysia · Kuala Lumpur</strong>
+    <p class="sea-note mt-1">Peta ini membantu orientasi lokasi sahaja; ia tidak menunjukkan insiden bagi negara terpilih.</p>
+   </div>
+  </div>
+  <div id="sea-reference-map" role="img" aria-label="Peta geografi rujukan Malaysia dan Asia Tenggara"></div>
+  <div class="flex flex-wrap gap-2">
+   <button type="button" id="sea-reset" class="sea-btn">RESET TO MALAYSIA</button>
+   <a class="sea-btn" href="https://recentbreaches.com/" target="_blank" rel="noopener noreferrer">PUBLIC BREACH REPORTS ↗</a>
+   <a class="sea-btn" href="https://threatmap.brandefense.io/" target="_blank" rel="noopener noreferrer">LIVE THREAT TELEMETRY ↗</a>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+   <div class="sea-card"><div class="text-[10px] text-gray-400">REGION</div><strong class="text-sm text-cyber-green">Asia-Pacific</strong></div>
+   <div class="sea-card"><div class="text-[10px] text-gray-400">FOCUS</div><strong class="text-sm text-cyber-green">Malaysia / ASEAN</strong></div>
+   <div class="sea-card"><div class="text-[10px] text-gray-400">MAP TYPE</div><strong class="text-sm text-cyber-green">Geographic reference</strong></div>
+   <div class="sea-card"><div class="text-[10px] text-gray-400">INCIDENT COUNTS</div><strong class="text-sm text-cyber-green">Not supplied here</strong></div>
+  </div>
+  <p class="sea-note">Peta menggunakan OpenStreetMap. Penanda pusat bandar ialah rujukan geografi, bukan lokasi serangan. Data insiden dan telemetri mesti disemak pada sumber luar yang dipautkan; tiada jumlah ancaman atau tahap risiko negara direka atau diandaikan. Peta memerlukan internet dan mungkin tidak dimuatkan jika pembekal tile menyekat permintaan.</p>
+ </div>
+</section>
+<script>
+(function(){
+ const root=document.getElementById('apex-sea-intel');
+ if(!root || root.dataset.initialized==='1') return;
+ root.dataset.initialized='1';
+ const select=root.querySelector('#sea-country');
+ const label=root.querySelector('#sea-focus-label');
+ const mapNode=root.querySelector('#sea-reference-map');
+ if(!select || !mapNode) return;
+ function startMap(){
+  if(typeof L==='undefined'){ mapNode.innerHTML='<div style="padding:16px;color:#9ca3af;font-size:12px">Peta rujukan tidak dapat dimuatkan. Semak sambungan internet atau gunakan peta ancaman global di atas.</div>'; return; }
+  const map=L.map(mapNode,{zoomControl:true,scrollWheelZoom:false}).setView([3.139,101.686],4);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+   maxZoom:18, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  const points=[
+   ['Kuala Lumpur, Malaysia',3.139,101.686],['Singapore',1.352,103.820],
+   ['Jakarta, Indonesia',-6.208,106.845],['Bangkok, Thailand',13.756,100.502],
+   ['Manila, Philippines',14.600,120.984],['Hanoi, Vietnam',21.028,105.834],
+   ['Bandar Seri Begawan, Brunei',4.904,114.939],['Phnom Penh, Cambodia',11.557,104.928],
+   ['Vientiane, Laos',17.975,102.633],['Naypyidaw, Myanmar',19.763,96.079]
+  ];
+  points.forEach(p=>L.circleMarker([p[1],p[2]],{radius:5,color:'#34d399',weight:1,fillColor:'#10b981',fillOpacity:.75}).addTo(map).bindPopup(p[0]+' · geographic reference'));
+  function focus(){
+   const parts=select.value.split(',').map(Number);
+   const opt=select.options[select.selectedIndex];
+   map.setView([parts[0],parts[1]],parts[2],{animate:true});
+   label.textContent=opt.text;
+  }
+  select.addEventListener('change',focus);
+  root.querySelector('#sea-reset').addEventListener('click',()=>{select.selectedIndex=0;focus();});
+  setTimeout(()=>map.invalidateSize(),250);
+ }
+ if(typeof L!=='undefined') startMap();
+ else {
+  let tries=0;
+  const timer=setInterval(()=>{tries++;if(typeof L!=='undefined'){clearInterval(timer);startMap();}else if(tries>30){clearInterval(timer);startMap();}},200);
+ }
+})();
+</script>
 
 </body></html>
