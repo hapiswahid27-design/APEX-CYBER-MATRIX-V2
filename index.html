@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.4 SOC COMMAND CENTER</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.5 LIVE TERMINAL WALL</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -2378,6 +2378,61 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='APEX_SOC_Observation_Register.csv';a.click();URL.revokeObjectURL(url);
  });
  renderCases();loadKev();
+})();
+</script>
+
+
+<style>
+#apex-live-terminals{font-family:'Share Tech Mono',monospace}
+#apex-live-terminals .term-window{background:#020a10;border:1px solid #14513c;border-radius:9px;overflow:hidden;min-width:0;box-shadow:0 0 14px rgba(0,255,102,.08)}
+#apex-live-terminals .term-head{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;background:#071b26;border-bottom:1px solid #174333;color:#54e6a5;font-size:11px;letter-spacing:1.5px}
+#apex-live-terminals .term-dots{display:flex;gap:4px}
+#apex-live-terminals .term-dots i{width:7px;height:7px;border-radius:50%;background:#ff5c68}
+#apex-live-terminals .term-dots i:nth-child(2){background:#f4c34e}#apex-live-terminals .term-dots i:nth-child(3){background:#31d78a}
+#apex-live-terminals .term-screen{height:190px;overflow:hidden;padding:10px;color:#8ee9b8;font-size:10px;line-height:1.7;overflow-wrap:anywhere}
+#apex-live-terminals .term-line{white-space:normal;border-bottom:1px solid rgba(40,120,80,.12);padding:2px 0}
+#apex-live-terminals .term-dim{color:#6c8792}#apex-live-terminals .term-warn{color:#f5c15d}#apex-live-terminals .term-good{color:#45e6a0}
+#apex-live-terminals .term-cursor{display:inline-block;width:6px;height:12px;background:#43f59b;vertical-align:middle;animation:apexBlink 1s steps(2) infinite}
+@keyframes apexBlink{50%{opacity:0}}
+@media(max-width:480px){#apex-live-terminals .term-screen{height:165px;font-size:9px}#apex-live-terminals .term-head{font-size:9px}}
+@media(prefers-reduced-motion:reduce){#apex-live-terminals *{animation:none!important;transition:none!important}}
+</style>
+<section id="apex-live-terminals" class="lg:col-span-3 bg-cyber-card border border-cyber-green/50 rounded-xl p-4 glow-box mt-2">
+ <div class="flex flex-wrap justify-between items-center gap-3 border-b border-cyber-border pb-3 mb-3">
+  <div><h2 class="text-sm font-bold tracking-widest text-cyber-green">15 // LIVE TERMINAL WALL</h2>
+  <p class="text-[10px] text-gray-400 mt-1">Paparan simulasi log keselamatan bergerak untuk latihan SOC</p></div>
+  <div class="flex gap-2"><button id="apex-term-toggle" type="button" class="border border-cyber-green text-cyber-green rounded px-3 py-2 text-xs">PAUSE</button><button id="apex-term-clear" type="button" class="border border-cyber-border text-gray-300 rounded px-3 py-2 text-xs">CLEAR</button></div>
+ </div>
+ <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+  <div class="term-window"><div class="term-head"><span>01 // AUTH MONITOR</span><span class="term-dots"><i></i><i></i><i></i></span></div><div class="term-screen" id="apex-term-0" aria-live="polite"></div></div>
+  <div class="term-window"><div class="term-head"><span>02 // NETWORK EVENTS</span><span class="term-dots"><i></i><i></i><i></i></span></div><div class="term-screen" id="apex-term-1" aria-live="polite"></div></div>
+  <div class="term-window"><div class="term-head"><span>03 // SYSTEM HEALTH</span><span class="term-dots"><i></i><i></i><i></i></span></div><div class="term-screen" id="apex-term-2" aria-live="polite"></div></div>
+  <div class="term-window"><div class="term-head"><span>04 // SOC ANALYST</span><span class="term-dots"><i></i><i></i><i></i></span></div><div class="term-screen" id="apex-term-3" aria-live="polite"></div></div>
+ </div>
+ <div class="flex flex-wrap justify-between gap-2 mt-3 text-[10px] text-gray-400"><span id="apex-term-state">SIMULATION RUNNING</span><span>LOCAL DEMO DATA · NOT LIVE NETWORK TRAFFIC</span></div>
+</section>
+<script>
+(function(){
+ const root=document.getElementById('apex-live-terminals'); if(!root||root.dataset.ready)return; root.dataset.ready='1';
+ const panels=[0,1,2,3].map(i=>root.querySelector('#apex-term-'+i));
+ const sources=[
+  [['AUTH','Session token validation complete','good'],['AUTH','MFA challenge simulated: passed','good'],['AUTH','Failed login pattern sample detected','warn'],['AUTH','Access policy check complete','good'],['AUTH','Account review queued for analyst','dim']],
+  [['NET','DNS query event recorded (demo)','good'],['NET','HTTPS endpoint check simulated','good'],['NET','Outbound connection sample reviewed','dim'],['NET','Unusual traffic pattern flagged (demo)','warn'],['NET','Firewall rule audit: no action taken','good']],
+  [['SYS','CPU health sample: 24%','good'],['SYS','Memory health sample: 61%','good'],['SYS','Patch review reminder generated','warn'],['SYS','Endpoint status: training device','dim'],['SYS','Backup verification sample complete','good']],
+  [['SOC','Analyst workspace initialized','good'],['SOC','Training event added to local queue','dim'],['SOC','Evidence checklist opened','good'],['SOC','Severity requires human review','warn'],['SOC','Incident notes saved in demo session','good']]
+ ];
+ let running=true,tick=0,timer=null;
+ function line(panel,item){
+  const d=document.createElement('div');d.className='term-line term-'+item[2];
+  const stamp=new Date().toLocaleTimeString();d.textContent='['+stamp+'] '+item[0]+' > '+item[1];
+  panel.appendChild(d);while(panel.children.length>9)panel.removeChild(panel.firstChild);panel.scrollTop=panel.scrollHeight;
+ }
+ function step(){tick++;panels.forEach((p,i)=>line(p,sources[i][(tick+i*2)%sources[i].length]));}
+ function start(){if(timer)return;running=true;root.querySelector('#apex-term-toggle').textContent='PAUSE';root.querySelector('#apex-term-state').textContent='SIMULATION RUNNING';step();timer=setInterval(step,1150);}
+ function pause(){running=false;clearInterval(timer);timer=null;root.querySelector('#apex-term-toggle').textContent='START';root.querySelector('#apex-term-state').textContent='SIMULATION PAUSED';}
+ root.querySelector('#apex-term-toggle').addEventListener('click',()=>running?pause():start());
+ root.querySelector('#apex-term-clear').addEventListener('click',()=>panels.forEach(p=>p.replaceChildren()));
+ start();
 })();
 </script>
 
