@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v9.4 IDS + INCIDENT + NETWORK SECURITY</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v9.5 SSL + WEB SECURITY</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -1641,7 +1641,7 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
  const $=id=>document.getElementById(id);
  if(!$('net-domain') || $('net-domain').dataset.ready) return;
  $('net-domain').dataset.ready='1';
- let dnsCount=0,httpsCount=0,lastReport='APEX NETWORK SECURITY REPORT\nTiada pemeriksaan dijalankan.';
+ let dnsCount=0,httpsCount=0,lastReport='APEX CYBER MATRIX v9.5 SECURITY REPORT\nTiada pemeriksaan dijalankan.';
  function cleanDomain(raw){
   let s=String(raw||'').trim().toLowerCase().replace(/^https?:\/\//,'').split(/[/?#]/)[0].replace(/:\d+$/,'').replace(/\.$/,'');
   if(!s || s.length>253 || !/^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)(\.([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?))*$/.test(s)) throw new Error('Domain tidak sah. Masukkan contoh.com tanpa laluan.');
@@ -1670,7 +1670,7 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
    $('net-dns-result').textContent=report;
    $('net-dns-count').textContent=dnsCount;
    $('net-status').textContent='DNS lookup berjaya. Ini rekod DNS awam, bukan bukti domain selamat atau bebas ancaman.';
-   lastReport='APEX NETWORK SECURITY REPORT\n\n'+report+'\n\n'+lastReport;
+   lastReport='APEX CYBER MATRIX v9.5 SECURITY REPORT\n\n'+report+'\n\n'+lastReport;
   }catch(e){$('net-status').textContent='DNS lookup gagal: '+e.message+'. Semak sambungan internet atau cuba lagi.';$('net-dns-result').textContent='Tiada keputusan DNS yang boleh disahkan.';}
  });
  $('net-check-https').addEventListener('click',async()=>{
@@ -1689,12 +1689,12 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
    const report='HOST: '+d+'\nHTTPS URL: '+url+'\nRESULT: Pelayar berjaya memulakan permintaan HTTPS (opaque response).\nELAPSED: '+ms+' ms\nLIMITATION: Safari tidak mendedahkan status HTTP, butiran sijil atau header dalam mod no-cors.';
    $('net-https-result').textContent=report;
    $('net-status').textContent='Sambungan HTTPS boleh dimulakan. Ini bukan audit sijil atau pengesahan laman selamat.';
-   lastReport='APEX NETWORK SECURITY REPORT\n\n'+report+'\n\n'+lastReport;
+   lastReport='APEX CYBER MATRIX v9.5 SECURITY REPORT\n\n'+report+'\n\n'+lastReport;
   }catch(e){
    const report='HOST: '+d+'\nHTTPS URL: '+url+'\nRESULT: Permintaan tidak dapat disahkan dari pelayar.\nDETAIL: '+e.message+'\nPOSSIBLE CAUSES: domain tidak boleh dicapai, DNS/rangkaian menyekat, TLS gagal, atau timeout.\nNOTE: Kegagalan ini sahaja tidak membuktikan pencerobohan.';
    $('net-https-result').textContent=report;
    $('net-status').textContent='Capaian HTTPS gagal atau tidak dapat disahkan. Semak domain dan rangkaian.';
-   lastReport='APEX NETWORK SECURITY REPORT\n\n'+report+'\n\n'+lastReport;
+   lastReport='APEX CYBER MATRIX v9.5 SECURITY REPORT\n\n'+report+'\n\n'+lastReport;
   }
  });
  $('net-export').addEventListener('click',()=>{
@@ -1702,6 +1702,126 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
   const url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='apex-network-security-report.txt';a.click();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
+ });
+})();
+</script>
+
+
+<style>
+#apex-ssl .ssl-card{background:#020b09;border:1px solid #17634b;border-radius:10px;padding:14px}
+#apex-ssl .ssl-btn{background:#064e3b;border:1px solid #00c98a;color:#c9ffe9;border-radius:8px;padding:12px;font-weight:700;width:100%}
+#apex-ssl .ssl-input{width:100%;background:#020b09;border:1px solid #17634b;border-radius:8px;padding:13px;color:#d1fae5;outline:none}
+#apex-ssl .ssl-output{white-space:pre-wrap;overflow-wrap:anywhere;background:#020b09;border:1px solid #174b3b;border-radius:8px;padding:12px;font-size:12px;color:#c9ffe9}
+#apex-ssl .ssl-muted{color:#9ca3af;font-size:12px}
+</style>
+<section id="apex-ssl" class="mt-4 space-y-3" aria-labelledby="ssl-title">
+ <div class="ssl-card space-y-3">
+  <div class="flex flex-wrap justify-between items-center gap-2 border-b border-cyber-border pb-3">
+   <div>
+    <h2 id="ssl-title" class="text-sm font-bold tracking-widest text-cyber-green">09 // SSL CERTIFICATE & WEB SECURITY</h2>
+    <p class="text-xs text-gray-400 mt-1">Semakan pasif rekod sijil awam dan ujian capaian HTTPS untuk domain yang anda miliki atau diberi kuasa.</p>
+   </div>
+   <span class="text-xs border border-cyber-green rounded-full px-2 py-1">PASSIVE CHECK</span>
+  </div>
+  <label for="ssl-domain" class="text-xs font-bold">DOMAIN / HOSTNAME</label>
+  <input id="ssl-domain" class="ssl-input" type="text" inputmode="url" autocomplete="url" placeholder="contoh: example.com">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+   <button id="ssl-ct-check" type="button" class="ssl-btn">CHECK CERTIFICATE HISTORY</button>
+   <button id="ssl-header-check" type="button" class="ssl-btn">CHECK HTTPS & SECURITY HEADERS</button>
+  </div>
+  <div id="ssl-status" class="ssl-output" role="status" aria-live="polite">Masukkan domain untuk memulakan semakan.</div>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+   <div class="ssl-output"><span class="ssl-muted">CT RECORDS</span><br><strong id="ssl-ct-count">0</strong></div>
+   <div class="ssl-output"><span class="ssl-muted">LATEST NOT AFTER</span><br><strong id="ssl-expiry">—</strong></div>
+   <div class="ssl-output"><span class="ssl-muted">HTTPS</span><br><strong id="ssl-https">—</strong></div>
+   <div class="ssl-output"><span class="ssl-muted">HEADERS</span><br><strong id="ssl-headers">—</strong></div>
+  </div>
+  <div id="ssl-ct-result" class="ssl-output">Certificate Transparency: belum diperiksa.</div>
+  <div id="ssl-header-result" class="ssl-output">HTTPS / security headers: belum diperiksa.</div>
+  <button id="ssl-export" type="button" class="ssl-btn">EXPORT SSL & WEB REPORT (TXT)</button>
+  <p class="ssl-muted">Penting: Certificate Transparency (CT) menunjukkan rekod sijil yang diterbitkan secara awam, bukan pengesahan sijil yang sedang digunakan oleh pelayan. Tarikh luput yang dipaparkan ialah tarikh daripada rekod CT terkini yang berjaya diperoleh. Safari mengehadkan akses kepada butiran sijil TLS dan response headers rentas domain; keputusan “tidak dapat dibaca” bukan bermaksud header tiada. Untuk audit penuh, gunakan pengimbas TLS/HTTP yang dipercayai dari komputer atau pelayan anda.</p>
+ </div>
+</section>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const root=$('apex-ssl');
+ if(!root || root.dataset.ready) return;
+ root.dataset.ready='1';
+ let report='APEX CYBER MATRIX v9.5 SECURITY REPORT\nNo SSL/web checks performed.';
+ function domainValue(){
+  let d=String($('ssl-domain').value||'').trim().toLowerCase()
+   .replace(/^https?:\/\//,'').split(/[/?#]/)[0].replace(/:\d+$/,'').replace(/\.$/,'');
+  if(!d || d.length>253 || !/^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)(\.([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?))*$/.test(d)){
+   throw new Error('Domain tidak sah. Contoh: example.com');
+  }
+  return d;
+ }
+ function addReport(s){report='APEX CYBER MATRIX v9.5 SECURITY REPORT\n\n'+s+'\n\n'+report;}
+ $('ssl-ct-check').addEventListener('click',async()=>{
+  let d;try{d=domainValue();}catch(e){$('ssl-status').textContent=e.message;return;}
+  $('ssl-status').textContent='Mendapatkan rekod Certificate Transparency untuk '+d+'...';
+  $('ssl-ct-result').textContent='Menunggu sumber awam crt.sh...';
+  $('ssl-expiry').textContent='Checking';
+  try{
+   const endpoint='https://crt.sh/?q='+encodeURIComponent('%25.'+d)+'&output=json';
+   const response=await fetch(endpoint,{headers:{'Accept':'application/json'}});
+   if(!response.ok) throw new Error('Sumber CT memberi HTTP '+response.status);
+   const rows=await response.json();
+   if(!Array.isArray(rows)||!rows.length) throw new Error('Tiada rekod CT dipulangkan.');
+   const unique=new Map();
+   rows.forEach(x=>unique.set(String(x.id),x));
+   const data=[...unique.values()].sort((a,b)=>new Date(b.not_after)-new Date(a.not_after));
+   const latest=data[0];
+   const expiry=latest.not_after||'Tidak dinyatakan';
+   const lines=data.slice(0,12).map(x=>
+    'ID: '+(x.id||'-')+'\nIssuer: '+(x.issuer_name||'-')+'\nNames: '+(x.name_value||'-')+'\nNot before: '+(x.not_before||'-')+'\nNot after: '+(x.not_after||'-')
+   ).join('\n\n');
+   const out='DOMAIN: '+d+'\nSOURCE: crt.sh / Certificate Transparency\nUNIQUE RECORDS RETURNED: '+data.length+'\nLATEST RECORDED NOT AFTER: '+expiry+'\n\n'+lines+'\n\nLIMIT: CT history is not a live TLS handshake and may include old, renewed, wildcard or revoked certificates.';
+   $('ssl-ct-count').textContent=data.length;
+   $('ssl-expiry').textContent=expiry==='Tidak dinyatakan'?'—':new Date(expiry).toLocaleDateString();
+   $('ssl-ct-result').textContent=out;
+   $('ssl-status').textContent='Rekod CT berjaya diperoleh. Semak tarikh dan nama domain; rekod ini bukan pengesahan sijil aktif.';
+   addReport(out);
+  }catch(e){
+   $('ssl-ct-count').textContent='—';$('ssl-expiry').textContent='—';
+   $('ssl-ct-result').textContent='Semakan CT tidak berjaya: '+e.message+'\nKemungkinan: sumber menyekat permintaan, sambungan gagal atau tiada rekod.';
+   $('ssl-status').textContent='Tidak dapat mengesahkan rekod CT dari Safari. Cuba semula kemudian.';
+  }
+ });
+ $('ssl-header-check').addEventListener('click',async()=>{
+  let d;try{d=domainValue();}catch(e){$('ssl-status').textContent=e.message;return;}
+  const url='https://'+d+'/';
+  $('ssl-status').textContent='Menguji HTTPS dan kebolehcapaian header untuk '+d+'...';
+  $('ssl-header-result').textContent='Menunggu respons pelayar...';
+  try{
+   const response=await Promise.race([
+    fetch(url,{method:'GET',mode:'cors',cache:'no-store',redirect:'follow'}),
+    new Promise((_,reject)=>setTimeout(()=>reject(new Error('Masa tamat selepas 10 saat')),10000))
+   ]);
+   const names=['strict-transport-security','content-security-policy','x-frame-options','x-content-type-options','referrer-policy','permissions-policy'];
+   const found=names.map(n=>n+': '+(response.headers.get(n)||'Tidak didedahkan / tidak ditemui'));
+   const readable=names.filter(n=>response.headers.get(n)).length;
+   const out='HOST: '+d+'\nHTTPS URL: '+url+'\nFETCH: berjaya; HTTP status '+response.status+'\nFINAL URL: '+response.url+'\nSECURITY HEADERS READABLE: '+readable+'/'+names.length+'\n\n'+found.join('\n')+'\n\nNOTE: Browser CORS may hide headers unless the server exposes them. “Tidak didedahkan / tidak ditemui” is not proof that the server does not send that header.';
+   $('ssl-https').textContent='Reachable';
+   $('ssl-headers').textContent=readable+'/'+names.length;
+   $('ssl-header-result').textContent=out;
+   $('ssl-status').textContent='HTTPS boleh dicapai. Header yang boleh dibaca disenaraikan; keputusan mungkin terhad oleh CORS.';
+   addReport(out);
+  }catch(e){
+   const out='HOST: '+d+'\nHTTPS URL: '+url+'\nRESULT: Browser could not read a CORS-enabled response.\nDETAIL: '+e.message+'\nLIMIT: This does not prove the website is down or that its TLS certificate is invalid. Safari may block cross-origin response access.';
+   $('ssl-https').textContent='Unknown';
+   $('ssl-headers').textContent='Blocked';
+   $('ssl-header-result').textContent=out;
+   $('ssl-status').textContent='Safari tidak dapat membaca respons. Ini mungkin sekatan CORS, rangkaian atau timeout; bukan bukti laman digodam.';
+   addReport(out);
+  }
+ });
+ $('ssl-export').addEventListener('click',()=>{
+  const blob=new Blob([report],{type:'text/plain;charset=utf-8'});
+  const u=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=u;a.download='apex-v9.5-ssl-web-security-report.txt';a.click();
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
  });
 })();
 </script>
