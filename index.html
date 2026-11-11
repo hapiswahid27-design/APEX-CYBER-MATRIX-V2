@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v9.6 ASSET & RISK REGISTER</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v9.7 LIVE CYBER THREAT MAP</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -1934,5 +1934,44 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
  render();
 })();
 </script>
+
+
+<!-- APEX CYBER MATRIX v9.7: PUBLIC LIVE THREAT MAP -->
+<style>
+ #apex-live-map .map-card{background:#071827;border:1px solid #14532d;border-radius:10px;padding:12px}
+ #apex-live-map .map-frame{width:100%;height:540px;border:1px solid #0f766e;border-radius:8px;background:#06101b}
+ #apex-live-map .map-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border:1px solid #10b981;border-radius:7px;color:#34d399;background:#052e24;font-size:12px;font-weight:700}
+ #apex-live-map .map-note{font-size:11px;line-height:1.5;color:#9ca3af}
+ @media(max-width:600px){#apex-live-map .map-frame{height:460px}}
+</style>
+<section id="apex-live-map" class="mt-4 space-y-3" aria-labelledby="apex-live-map-title">
+ <div class="map-card space-y-3">
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-cyber-border pb-3">
+   <div>
+    <h2 id="apex-live-map-title" class="text-sm font-bold tracking-widest text-cyber-green">11 // GLOBAL LIVE CYBER THREAT MAP</h2>
+    <p class="text-xs text-gray-400 mt-1">Paparan ancaman siber global daripada rangkaian pengesanan awam Kaspersky.</p>
+   </div>
+   <span class="text-xs border border-cyber-green rounded-full px-2 py-1">PUBLIC THREAT FEED</span>
+  </div>
+  <div class="flex flex-wrap gap-2">
+   <a class="map-btn" href="https://cybermap.kaspersky.com/en" target="_blank" rel="noopener noreferrer">OPEN FULL LIVE MAP ↗</a>
+   <a class="map-btn" href="https://cybermap.kaspersky.com/stats" target="_blank" rel="noopener noreferrer">VIEW LIVE STATISTICS ↗</a>
+  </div>
+  <iframe class="map-frame" src="https://cybermap.kaspersky.com/en/widget/dynamic/light" title="Kaspersky public cyberthreat live map" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+   <div class="map-card">
+    <div class="text-[10px] text-gray-400">DATA SOURCE</div>
+    <strong class="text-sm text-cyber-green">Kaspersky Cyberthreat Map</strong>
+    <p class="map-note mt-1">Paparan berdasarkan pengesanan yang dikongsi oleh rangkaian Kaspersky.</p>
+   </div>
+   <div class="map-card">
+    <div class="text-[10px] text-gray-400">MAP STATUS</div>
+    <strong class="text-sm text-cyber-green">External live visualization</strong>
+    <p class="map-note mt-1">Peta dimuatkan terus daripada penyedia luar; sambungan internet diperlukan.</p>
+   </div>
+  </div>
+  <p class="map-note">Nota: Ini ialah paparan telemetri ancaman yang dikesan oleh rangkaian Kaspersky, bukan semua serangan di seluruh dunia dan bukan pemantauan rangkaian iPhone atau APEX anda. Lokasi pada peta ialah lokasi pemerhatian/telemetri dan tidak semestinya lokasi sebenar penyerang. Kandungan peta mungkin tidak dipaparkan jika penyedia menyekat iframe; gunakan butang OPEN FULL LIVE MAP. Sumber: <a class="underline text-emerald-300" href="https://cybermap.kaspersky.com/en" target="_blank" rel="noopener noreferrer">Kaspersky Cyberthreat Map</a>.</p>
+ </div>
+</section>
 
 </body></html>
