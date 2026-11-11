@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.7 LIVE THREAT INTELLIGENCE</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.8 REAL PUBLIC INTELLIGENCE</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -2482,8 +2482,25 @@ async function loadKev(){
 <section id="apex-live-soc" class="lg:col-span-3 bg-cyber-card border border-cyber-green/50 rounded-xl p-4 glow-box mt-2">
  <div class="flex flex-wrap justify-between items-center gap-2 border-b border-cyber-border pb-3 mb-3">
   <div><h2 class="text-sm font-bold tracking-widest text-cyber-green">16 // LIVE SOC DASHBOARD</h2>
-  <p class="text-[10px] text-gray-400 mt-1">Papan pemantauan latihan · nombor dan aktiviti simulasi</p></div>
+  <p class="text-[10px] text-gray-400 mt-1">SOC training metrics + separate public vulnerability intelligence feed</p></div>
   <span id="apex-soc-clock" class="text-xs text-cyber-green">SIMULATION READY</span>
+ </div>
+ <div class="soc-tile mb-3" id="apex-public-intel">
+  <div class="flex flex-wrap justify-between items-center gap-2">
+   <span class="soc-label">REAL PUBLIC THREAT INTELLIGENCE</span>
+   <span id="apex-public-intel-state" class="soc-pill">CHECKING CISA KEV</span>
+  </div>
+  <div class="text-sm text-gray-200 mt-2">CISA Known Exploited Vulnerabilities (KEV)</div>
+  <div class="flex flex-wrap items-center gap-3 mt-2">
+   <strong id="apex-public-kev-count" class="text-2xl text-emerald-300">—</strong>
+   <span class="text-[10px] text-gray-400">records in public catalogue</span>
+  </div>
+  <div id="apex-public-kev-updated" class="text-[10px] text-gray-400 mt-1">Status will appear after feed check.</div>
+  <div class="flex flex-wrap gap-2 mt-3">
+   <button id="apex-public-kev-refresh" type="button" class="border border-cyber-green text-cyber-green rounded px-3 py-2 text-xs">REFRESH REAL PUBLIC DATA</button>
+   <a class="text-xs underline text-emerald-300 self-center" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer">OFFICIAL CISA CATALOG ↗</a>
+  </div>
+  <p class="text-[10px] text-gray-400 mt-2">Data ini ialah katalog kerentanan awam yang diketahui dieksploitasi, bukan serangan yang dikesan pada peranti atau rangkaian anda.</p>
  </div>
  <div class="grid grid-cols-2 gap-2">
   <div class="soc-tile"><div class="soc-label">EVENTS PROCESSED</div><div class="soc-value" id="apex-soc-events">0000</div></div>
@@ -2501,7 +2518,7 @@ async function loadKev(){
   <div class="soc-bar" id="apex-soc-chart" aria-label="Graf aktiviti rangkaian simulasi"></div>
  </div>
  <div class="soc-tile mt-3">
-  <div class="flex justify-between items-center"><span class="soc-label">SECURITY ALERT STREAM</span><span class="soc-pill">DEMO FEED</span></div>
+  <div class="flex justify-between items-center"><span class="soc-label">SECURITY ALERT STREAM</span><span class="soc-pill">SIMULATION ONLY</span></div>
   <div id="apex-soc-alertstream" aria-live="polite">
    <div class="soc-alert">[READY] SOC training dashboard initialized</div>
   </div>
@@ -2510,12 +2527,46 @@ async function loadKev(){
   <button id="apex-soc-start" type="button" class="border border-cyber-green text-cyber-green rounded px-3 py-2 text-xs">PAUSE</button>
   <button id="apex-soc-reset" type="button" class="border border-cyber-border text-gray-300 rounded px-3 py-2 text-xs">RESET DEMO</button>
  </div>
- <p class="text-[10px] text-gray-400 mt-3">SIMULATED TELEMETRY · NO DEVICE, SERVER OR NETWORK IS BEING MONITORED</p>
+ <p class="text-[10px] text-gray-400 mt-3">TRAINING METRICS ARE SIMULATED · CISA KEV IS REAL PUBLIC DATA · NO PRIVATE NETWORK MONITORING</p>
 </section>
 <script>
 (function(){
  const root=document.getElementById('apex-live-soc');if(!root||root.dataset.ready)return;root.dataset.ready='1';
  const $=id=>root.querySelector('#'+id);
+ const publicState=$('apex-public-intel-state');
+ const publicCount=$('apex-public-kev-count');
+ const publicUpdated=$('apex-public-kev-updated');
+ const publicRefresh=$('apex-public-kev-refresh');
+ function syncPublicIntel(){
+  const mainStatus=document.getElementById('kev-status');
+  const mainCount=document.getElementById('kev-count');
+  const mainUpdated=document.getElementById('kev-updated');
+  if(!mainStatus||!mainCount||!mainUpdated){
+   publicState.textContent='SOURCE PANEL NOT FOUND';
+   publicUpdated.textContent='Buka modul CISA KEV untuk semakan manual.';
+   return;
+  }
+  const statusText=(mainStatus.textContent||'').trim();
+  const countText=(mainCount.textContent||'—').trim();
+  const updatedText=(mainUpdated.textContent||'').trim();
+  publicCount.textContent=countText;
+  publicUpdated.textContent=(statusText||'Status belum tersedia')+(updatedText?' · Updated: '+updatedText:'');
+  publicState.textContent=/offline|failed|unavailable|error/i.test(statusText)?'SOURCE UNAVAILABLE':(/loaded|online|success|catalogue/i.test(statusText)?'PUBLIC FEED CHECKED':'CHECK SOURCE STATUS');
+ }
+ if(publicRefresh){
+  publicRefresh.addEventListener('click',async()=>{
+   publicState.textContent='REFRESHING…';
+   if(typeof window.loadKevFeed==='function'){
+    try{await window.loadKevFeed();}catch(e){}
+   }else{
+    const kevButton=document.getElementById('kev-refresh');
+    if(kevButton)kevButton.click();
+   }
+   setTimeout(syncPublicIntel,1200);
+  });
+ }
+ setTimeout(syncPublicIntel,1800);
+ setInterval(syncPublicIntel,10000);
  const chart=$('apex-soc-chart'),stream=$('apex-soc-alertstream');
  let events=0,alerts=0,running=true,timer=null,level=18;
  let bars=Array.from({length:20},()=>Math.floor(12+Math.random()*55));
