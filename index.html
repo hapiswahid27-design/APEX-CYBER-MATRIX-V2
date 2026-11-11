@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.2 SOC LIVE INTELLIGENCE</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.3 SOC FEED FALLBACK</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -2124,7 +2124,7 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
  <div class="soc-card space-y-3">
   <div class="flex flex-wrap items-center justify-between gap-2 border-b border-cyber-border pb-3">
    <div>
-    <h2 id="apex-soc-live-title" class="text-sm font-bold tracking-widest text-cyber-green">13 // SOC LIVE INTELLIGENCE DASHBOARD</h2>
+    <h2 id="apex-soc-live-title" class="text-sm font-bold tracking-widest text-cyber-green">13 // SOC LIVE INTELLIGENCE DASHBOARD · v10.3</h2>
     <p class="text-xs text-gray-400 mt-1">Ringkasan laporan kebocoran awam dan kerentanan yang diketahui.</p>
    </div>
    <span id="soc-feed-state" class="text-xs border border-cyber-green rounded-full px-2 py-1">CONNECTING</span>
@@ -2157,7 +2157,7 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
   </div>
   <div class="soc-card">
    <strong class="text-xs text-cyber-green">DATA SOURCES & COVERAGE</strong>
-   <p class="soc-note mt-2">Data dipaparkan daripada API awam RecentBreaches. Kemas kini sumber di-cache kira-kira 10 minit. Feed ini mengandungi laporan awam dan bukan pengesanan langsung pada rangkaian APEX, telefon atau organisasi anda.</p>
+   <p class="soc-note mt-2">Data dipaparkan daripada API awam RecentBreaches; paparan alternatif digunakan jika API tidak dapat dicapai. Kemas kini sumber di-cache kira-kira 10 minit. Feed ini mengandungi laporan awam dan bukan pengesanan langsung pada rangkaian APEX, telefon atau organisasi anda.</p>
    <p class="soc-note mt-2">Sebahagian rekod ialah dakwaan kebocoran yang dilaporkan pihak ketiga dan belum semestinya disahkan. Jangan anggap senarai KEV sebagai bukti sistem anda terdedah; semak produk dan versi secara berasingan.</p>
    <p class="soc-note mt-2">Data/API: <a class="underline text-emerald-300" href="https://recentbreaches.com/embed" target="_blank" rel="noopener noreferrer">RecentBreaches</a> · Kerentanan: <a class="underline text-emerald-300" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer">CISA KEV Catalog</a>. Attribution dikekalkan.</p>
   </div>
@@ -2216,7 +2216,10 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
     const sev=x.severity||x.risk_level||'Unrated';
     return '<div class="soc-row"><a class="text-emerald-300 underline" href="'+safe(url)+'" target="_blank" rel="noopener noreferrer">'+safe(title)+'</a><div class="text-gray-400 mt-1">'+safe(date)+' · '+safe(sev)+'</div></div>';
    }).join(''):'No breach records returned by feed.';
-  }else $('soc-breach-list').textContent='Feed unavailable: '+breach.reason.message;
+  }else $('soc-breach-list').innerHTML=
+   '<div class="soc-note mb-2">Feed API tidak dapat dicapai dari pelayar ini. Paparan alternatif RecentBreaches:</div>'+
+   '<iframe title="RecentBreaches Live Wire" src="https://recentbreaches.com/embed/live-wire?theme=signal&mode=standard&window=7d" style="width:100%;height:310px;border:0;border-radius:8px;background:#071827" loading="lazy"></iframe>'+
+   '<p class="soc-note mt-2"><a class="underline text-emerald-300" href="https://recentbreaches.com/" target="_blank" rel="noopener noreferrer">Buka RecentBreaches</a></p>';
   const kev=results[2];
   if(kev.status==='fulfilled'){
    ok++;
@@ -2228,7 +2231,10 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
     const url=x.nvd_url||'https://www.cisa.gov/known-exploited-vulnerabilities-catalog';
     return '<div class="soc-row"><a class="text-emerald-300 underline" href="'+safe(url)+'" target="_blank" rel="noopener noreferrer">'+safe(cve)+'</a><div class="mt-1">'+safe(title)+'</div><div class="text-gray-400 mt-1">Due: '+safe(due)+'</div></div>';
    }).join(''):'No KEV records returned by feed.';
-  }else $('soc-kev-list').textContent='KEV feed unavailable: '+kev.reason.message;
+  }else $('soc-kev-list').innerHTML=
+   '<div class="soc-note mb-2">Feed KEV tidak dapat dicapai dari pelayar ini. Semak katalog rasmi CISA:</div>'+
+   '<a class="text-emerald-300 underline" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer">OPEN OFFICIAL CISA KEV CATALOG ↗</a>'+
+   '<p class="soc-note mt-2">JSON rasmi: <a class="underline text-emerald-300" href="https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json" target="_blank" rel="noopener noreferrer">Download / view CISA KEV JSON</a></p>';
   set('soc-feed-state',ok===3?'FEEDS ONLINE':ok+' / 3 FEEDS');
   $('soc-refresh').disabled=false;
  }
