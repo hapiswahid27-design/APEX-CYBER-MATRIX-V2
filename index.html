@@ -93,7 +93,7 @@
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-cyber-green animate-ping"></div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-cyber-green glow-text">
-                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.5 LIVE TERMINAL WALL</span>
+                    APEX CYBER MATRIX <span class="text-xs px-2 py-0.5 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green">FORTIGUARD v10.6 LIVE SOC DASHBOARD</span>
                 </h1>
             </div>
             <div class="flex items-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
@@ -2436,4 +2436,90 @@ print("[+] Access Granted. Global Threat Shield synchronized.")</textarea>
 })();
 </script>
 
+
+<style>
+#apex-live-soc{font-family:'Share Tech Mono',monospace}
+#apex-live-soc .soc-tile{background:#061923;border:1px solid #15543d;border-radius:10px;padding:13px;min-width:0}
+#apex-live-soc .soc-label{font-size:10px;letter-spacing:1.5px;color:#91a3ad}
+#apex-live-soc .soc-value{font-size:27px;color:#50e5a4;margin-top:5px}
+#apex-live-soc .soc-meter{height:10px;background:#142b31;border-radius:99px;overflow:hidden}
+#apex-live-soc .soc-meter>span{display:block;height:100%;width:22%;background:#42df9b;transition:width .6s ease,background .6s ease}
+#apex-live-soc .soc-bar{height:90px;display:flex;align-items:end;gap:5px;padding:8px 2px;border-bottom:1px solid #174333}
+#apex-live-soc .soc-bar i{flex:1;min-width:4px;background:linear-gradient(180deg,#55f0ae,#087b58);border-radius:3px 3px 0 0;transition:height .5s ease}
+#apex-live-soc .soc-alert{border-bottom:1px solid rgba(50,130,90,.22);padding:8px 0;font-size:11px;color:#b6c5ca}
+#apex-live-soc .soc-pill{font-size:9px;border:1px solid #946b28;color:#f5c45d;border-radius:20px;padding:2px 7px;white-space:nowrap}
+@media(prefers-reduced-motion:reduce){#apex-live-soc *{transition:none!important}}
+</style>
+<section id="apex-live-soc" class="lg:col-span-3 bg-cyber-card border border-cyber-green/50 rounded-xl p-4 glow-box mt-2">
+ <div class="flex flex-wrap justify-between items-center gap-2 border-b border-cyber-border pb-3 mb-3">
+  <div><h2 class="text-sm font-bold tracking-widest text-cyber-green">16 // LIVE SOC DASHBOARD</h2>
+  <p class="text-[10px] text-gray-400 mt-1">Papan pemantauan latihan · nombor dan aktiviti simulasi</p></div>
+  <span id="apex-soc-clock" class="text-xs text-cyber-green">SIMULATION READY</span>
+ </div>
+ <div class="grid grid-cols-2 gap-2">
+  <div class="soc-tile"><div class="soc-label">EVENTS PROCESSED</div><div class="soc-value" id="apex-soc-events">0000</div></div>
+  <div class="soc-tile"><div class="soc-label">ALERTS GENERATED</div><div class="soc-value" id="apex-soc-alerts">000</div></div>
+  <div class="soc-tile"><div class="soc-label">ACTIVE SESSIONS</div><div class="soc-value" id="apex-soc-sessions">012</div></div>
+  <div class="soc-tile"><div class="soc-label">SYSTEM HEALTH</div><div class="soc-value" id="apex-soc-health">98%</div></div>
+ </div>
+ <div class="soc-tile mt-3">
+  <div class="flex justify-between gap-2"><span class="soc-label">SIMULATED THREAT LEVEL</span><strong id="apex-soc-threat" class="text-xs text-green-300">LOW</strong></div>
+  <div class="soc-meter mt-2"><span id="apex-soc-threatbar"></span></div>
+  <p class="text-[10px] text-gray-400 mt-2">Penunjuk latihan sahaja; bukan penilaian ancaman rangkaian sebenar.</p>
+ </div>
+ <div class="soc-tile mt-3">
+  <div class="flex justify-between"><span class="soc-label">NETWORK ACTIVITY</span><span class="text-[10px] text-gray-400">LAST 20 TICKS</span></div>
+  <div class="soc-bar" id="apex-soc-chart" aria-label="Graf aktiviti rangkaian simulasi"></div>
+ </div>
+ <div class="soc-tile mt-3">
+  <div class="flex justify-between items-center"><span class="soc-label">SECURITY ALERT STREAM</span><span class="soc-pill">DEMO FEED</span></div>
+  <div id="apex-soc-alertstream" aria-live="polite">
+   <div class="soc-alert">[READY] SOC training dashboard initialized</div>
+  </div>
+ </div>
+ <div class="flex flex-wrap gap-2 mt-3">
+  <button id="apex-soc-start" type="button" class="border border-cyber-green text-cyber-green rounded px-3 py-2 text-xs">PAUSE</button>
+  <button id="apex-soc-reset" type="button" class="border border-cyber-border text-gray-300 rounded px-3 py-2 text-xs">RESET DEMO</button>
+ </div>
+ <p class="text-[10px] text-gray-400 mt-3">SIMULATED TELEMETRY · NO DEVICE, SERVER OR NETWORK IS BEING MONITORED</p>
+</section>
+<script>
+(function(){
+ const root=document.getElementById('apex-live-soc');if(!root||root.dataset.ready)return;root.dataset.ready='1';
+ const $=id=>root.querySelector('#'+id);
+ const chart=$('apex-soc-chart'),stream=$('apex-soc-alertstream');
+ let events=0,alerts=0,running=true,timer=null,level=18;
+ let bars=Array.from({length:20},()=>Math.floor(12+Math.random()*55));
+ function draw(){chart.replaceChildren();bars.forEach(v=>{const b=document.createElement('i');b.style.height=v+'%';chart.appendChild(b);});}
+ function addAlert(msg,warning){
+  const row=document.createElement('div');row.className='soc-alert';
+  row.textContent='['+new Date().toLocaleTimeString()+'] '+msg;
+  if(warning)row.style.color='#f2c46b';
+  stream.prepend(row);while(stream.children.length>5)stream.removeChild(stream.lastChild);
+ }
+ function step(){
+  events+=Math.floor(2+Math.random()*7);
+  const warning=Math.random()<.22;
+  if(warning){alerts++;addAlert(['Unusual traffic pattern flagged (demo)','Analyst review requested (demo)','Policy check requires attention (demo)'][Math.floor(Math.random()*3)],true);}
+  else if(Math.random()<.55)addAlert(['Authentication sample passed','Endpoint health sample normal','DNS telemetry sample received'][Math.floor(Math.random()*3)],false);
+  level=Math.max(8,Math.min(88,level+(Math.random()*18-8)));
+  $('apex-soc-events').textContent=String(events).padStart(4,'0');
+  $('apex-soc-alerts').textContent=String(alerts).padStart(3,'0');
+  $('apex-soc-sessions').textContent=String(8+Math.floor(Math.random()*13)).padStart(3,'0');
+  $('apex-soc-health').textContent=(96+Math.floor(Math.random()*4))+'%';
+  const threat=$('apex-soc-threat'),bar=$('apex-soc-threatbar');
+  bar.style.width=level+'%';
+  if(level>62){threat.textContent='ELEVATED';threat.style.color='#f2a65a';bar.style.background='#e5a33d';}
+  else if(level>35){threat.textContent='GUARDED';threat.style.color='#f2d16b';bar.style.background='#d4bd4a';}
+  else{threat.textContent='LOW';threat.style.color='#65e6a8';bar.style.background='#42df9b';}
+  bars.push(Math.floor(10+Math.random()*80));bars.shift();draw();
+  $('apex-soc-clock').textContent='UPDATED '+new Date().toLocaleTimeString();
+ }
+ function start(){if(timer)return;running=true;$('apex-soc-start').textContent='PAUSE';step();timer=setInterval(step,1800);}
+ function pause(){running=false;clearInterval(timer);timer=null;$('apex-soc-start').textContent='START';$('apex-soc-clock').textContent='PAUSED';}
+ $('apex-soc-start').addEventListener('click',()=>running?pause():start());
+ $('apex-soc-reset').addEventListener('click',()=>{pause();events=0;alerts=0;level=18;bars=Array.from({length:20},()=>Math.floor(12+Math.random()*55));stream.replaceChildren();addAlert('Demo counters reset',false);step();});
+ draw();start();
+})();
+</script>
 </body></html>
